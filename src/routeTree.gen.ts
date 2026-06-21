@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppUploadRouteImport } from './routes/_app.upload'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppModelsRouteImport } from './routes/_app.models'
 import { Route as AppHistoryRouteImport } from './routes/_app.history'
 
 const AppRoute = AppRouteImport.update({
@@ -34,6 +35,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const AppModelsRoute = AppModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHistoryRoute = AppHistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -43,11 +49,13 @@ const AppHistoryRoute = AppHistoryRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/history': typeof AppHistoryRoute
+  '/models': typeof AppModelsRoute
   '/settings': typeof AppSettingsRoute
   '/upload': typeof AppUploadRoute
 }
 export interface FileRoutesByTo {
   '/history': typeof AppHistoryRoute
+  '/models': typeof AppModelsRoute
   '/settings': typeof AppSettingsRoute
   '/upload': typeof AppUploadRoute
   '/': typeof AppIndexRoute
@@ -56,19 +64,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_app/history': typeof AppHistoryRoute
+  '/_app/models': typeof AppModelsRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/upload': typeof AppUploadRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/history' | '/settings' | '/upload'
+  fullPaths: '/' | '/history' | '/models' | '/settings' | '/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/history' | '/settings' | '/upload' | '/'
+  to: '/history' | '/models' | '/settings' | '/upload' | '/'
   id:
     | '__root__'
     | '/_app'
     | '/_app/history'
+    | '/_app/models'
     | '/_app/settings'
     | '/_app/upload'
     | '/_app/'
@@ -108,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/models': {
+      id: '/_app/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof AppModelsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/history': {
       id: '/_app/history'
       path: '/history'
@@ -120,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppHistoryRoute: typeof AppHistoryRoute
+  AppModelsRoute: typeof AppModelsRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppUploadRoute: typeof AppUploadRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -127,6 +145,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppHistoryRoute: AppHistoryRoute,
+  AppModelsRoute: AppModelsRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppUploadRoute: AppUploadRoute,
   AppIndexRoute: AppIndexRoute,
