@@ -1,11 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Mic, Upload, History, Settings, AudioLines } from "lucide-react";
+import { Mic, Upload, History, Settings, AudioLines, Boxes } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/", label: "Dictate", icon: Mic },
   { to: "/upload", label: "Upload", icon: Upload },
   { to: "/history", label: "History", icon: History },
+  { to: "/models", label: "Models", icon: Boxes },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
