@@ -15,6 +15,10 @@ import { Route as AppUploadRouteImport } from './routes/_app.upload'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppModelsRouteImport } from './routes/_app.models'
 import { Route as AppHistoryRouteImport } from './routes/_app.history'
+import { Route as AppSettingsIndexRouteImport } from './routes/_app.settings.index'
+import { Route as AppSettingsChangelogRouteImport } from './routes/_app.settings.changelog'
+import { Route as AppSettingsCapturesRouteImport } from './routes/_app.settings.captures'
+import { Route as AppSettingsAboutRouteImport } from './routes/_app.settings.about'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -45,35 +49,83 @@ const AppHistoryRoute = AppHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsChangelogRoute = AppSettingsChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsCapturesRoute = AppSettingsCapturesRouteImport.update({
+  id: '/captures',
+  path: '/captures',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsAboutRoute = AppSettingsAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/history': typeof AppHistoryRoute
   '/models': typeof AppModelsRoute
-  '/settings': typeof AppSettingsRoute
+  '/settings': typeof AppSettingsRouteWithChildren
   '/upload': typeof AppUploadRoute
+  '/settings/about': typeof AppSettingsAboutRoute
+  '/settings/captures': typeof AppSettingsCapturesRoute
+  '/settings/changelog': typeof AppSettingsChangelogRoute
+  '/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/history': typeof AppHistoryRoute
   '/models': typeof AppModelsRoute
-  '/settings': typeof AppSettingsRoute
   '/upload': typeof AppUploadRoute
   '/': typeof AppIndexRoute
+  '/settings/about': typeof AppSettingsAboutRoute
+  '/settings/captures': typeof AppSettingsCapturesRoute
+  '/settings/changelog': typeof AppSettingsChangelogRoute
+  '/settings': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_app/history': typeof AppHistoryRoute
   '/_app/models': typeof AppModelsRoute
-  '/_app/settings': typeof AppSettingsRoute
+  '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/upload': typeof AppUploadRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/settings/about': typeof AppSettingsAboutRoute
+  '/_app/settings/captures': typeof AppSettingsCapturesRoute
+  '/_app/settings/changelog': typeof AppSettingsChangelogRoute
+  '/_app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/history' | '/models' | '/settings' | '/upload'
+  fullPaths:
+    | '/'
+    | '/history'
+    | '/models'
+    | '/settings'
+    | '/upload'
+    | '/settings/about'
+    | '/settings/captures'
+    | '/settings/changelog'
+    | '/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/history' | '/models' | '/settings' | '/upload' | '/'
+  to:
+    | '/history'
+    | '/models'
+    | '/upload'
+    | '/'
+    | '/settings/about'
+    | '/settings/captures'
+    | '/settings/changelog'
+    | '/settings'
   id:
     | '__root__'
     | '/_app'
@@ -82,6 +134,10 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/upload'
     | '/_app/'
+    | '/_app/settings/about'
+    | '/_app/settings/captures'
+    | '/_app/settings/changelog'
+    | '/_app/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,13 +188,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHistoryRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/settings/': {
+      id: '/_app/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/changelog': {
+      id: '/_app/settings/changelog'
+      path: '/changelog'
+      fullPath: '/settings/changelog'
+      preLoaderRoute: typeof AppSettingsChangelogRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/captures': {
+      id: '/_app/settings/captures'
+      path: '/captures'
+      fullPath: '/settings/captures'
+      preLoaderRoute: typeof AppSettingsCapturesRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/about': {
+      id: '/_app/settings/about'
+      path: '/about'
+      fullPath: '/settings/about'
+      preLoaderRoute: typeof AppSettingsAboutRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
   }
 }
+
+interface AppSettingsRouteChildren {
+  AppSettingsAboutRoute: typeof AppSettingsAboutRoute
+  AppSettingsCapturesRoute: typeof AppSettingsCapturesRoute
+  AppSettingsChangelogRoute: typeof AppSettingsChangelogRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
+}
+
+const AppSettingsRouteChildren: AppSettingsRouteChildren = {
+  AppSettingsAboutRoute: AppSettingsAboutRoute,
+  AppSettingsCapturesRoute: AppSettingsCapturesRoute,
+  AppSettingsChangelogRoute: AppSettingsChangelogRoute,
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
+}
+
+const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
+  AppSettingsRouteChildren,
+)
 
 interface AppRouteChildren {
   AppHistoryRoute: typeof AppHistoryRoute
   AppModelsRoute: typeof AppModelsRoute
-  AppSettingsRoute: typeof AppSettingsRoute
+  AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppUploadRoute: typeof AppUploadRoute
   AppIndexRoute: typeof AppIndexRoute
 }
@@ -146,7 +248,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppHistoryRoute: AppHistoryRoute,
   AppModelsRoute: AppModelsRoute,
-  AppSettingsRoute: AppSettingsRoute,
+  AppSettingsRoute: AppSettingsRouteWithChildren,
   AppUploadRoute: AppUploadRoute,
   AppIndexRoute: AppIndexRoute,
 }
