@@ -28,6 +28,37 @@ export const Route = createFileRoute("/_app/models")({
   component: ModelsPage,
 });
 
+const MODEL_DESCRIPTIONS: Record<string, string> = {
+  tiny:
+    "Whisper Tiny (39M parameters). Tiny footprint, runs on any laptop. Quality drops on noisy audio.",
+  "tiny.en":
+    "Whisper Tiny English-only (39M). Slightly more accurate than multilingual tiny on English speech.",
+  base:
+    "Whisper Base (74M). Fast transcription with moderate accuracy. Good first choice for short clips.",
+  "base.en":
+    "Whisper Base English-only (74M). Better English quality than the multilingual base at the same speed.",
+  small:
+    "Whisper Small (244M). Solid balance of speed and accuracy for general transcription.",
+  "small.en":
+    "Whisper Small English-only (244M). Recommended for English-heavy workloads on modest hardware.",
+  medium:
+    "Whisper Medium (769M). Higher accuracy and better punctuation; needs more RAM and time.",
+  "medium.en":
+    "Whisper Medium English-only (769M). Strong English accuracy with reasonable speed on GPU.",
+  large:
+    "Whisper Large (1.5B). Top tier multilingual accuracy. Slow on CPU; ideal on GPU.",
+  "large-v1":
+    "Whisper Large v1 (1.5B). Original large checkpoint. Prefer v2 or v3 unless you need v1 specifically.",
+  "large-v2":
+    "Whisper Large v2 (1.5B). Improved training over v1, strong all-rounder for multilingual audio.",
+  "large-v3":
+    "Whisper Large v3 (1.5B). Best accuracy across 99 languages, especially on noisy or accented speech.",
+  turbo:
+    "Whisper Large v3 Turbo. Pruned decoder for ~4x faster inference at near-large quality.",
+  "distil-large-v3":
+    "Distil-Whisper Large v3. ~6x faster than large with comparable English accuracy via distillation.",
+};
+
 function ModelsPage() {
   const { model: defaultModel, setModel } = useSettings();
   const [status, setStatus] = useState<ModelStatus | null>(null);
