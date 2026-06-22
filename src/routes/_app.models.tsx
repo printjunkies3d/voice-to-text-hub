@@ -217,11 +217,16 @@ function ModelCard({
       )}
     >
       <header className="flex items-start justify-between gap-2">
-        <div>
+        <div className="min-w-0">
           <h3 className="font-mono text-base font-semibold text-foreground">
             {info.name}
           </h3>
           <p className="mt-0.5 text-xs text-muted-foreground">{sizeLabel}</p>
+          {MODEL_DESCRIPTIONS[info.name] ? (
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground/80">
+              {MODEL_DESCRIPTIONS[info.name]}
+            </p>
+          ) : null}
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           {info.loaded ? (
