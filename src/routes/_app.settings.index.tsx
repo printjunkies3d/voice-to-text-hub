@@ -15,7 +15,7 @@ import {
 import { API_BASE_URL, fetchHealth, fetchModels, type ModelsResponse } from "@/lib/api";
 import { useSettings } from "@/stores/settingsStore";
 
-export const Route = createFileRoute("/_app/settings")({
+export const Route = createFileRoute("/_app/settings/")({
   component: SettingsPage,
 });
 
